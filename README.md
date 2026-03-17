@@ -6,21 +6,24 @@ End-to-end machine learning project focused on predicting customer churn in a te
 
 ## Project Overview
 
-Customer churn is one of the most important business problems in subscription-based companies. Predicting which customers are likely to leave can help businesses improve retention strategies and reduce revenue loss.
+Customer churn is a critical problem for subscription-based businesses, as losing customers directly impacts revenue and growth.
 
-In this project, I analyze a telecom customer dataset and build multiple machine learning models to predict churn based on customer demographics, contract information, and service usage patterns.
+In this project, I build a machine learning model to identify customers at risk of churn using demographic, contract, and service usage data.
+
+Beyond prediction, the goal is to understand the key drivers of churn in order to support data-driven retention strategies.
 
 ---
 
 ## Business Problem
 
-Customer acquisition is usually more expensive than customer retention.  
-A churn prediction model can help identify high-risk customers early and support targeted retention actions.
+Retaining existing customers is typically more cost-effective than acquiring new ones.
 
-The objective of this project is to answer two key questions:
+Being able to identify customers at high risk of churn allows companies to take proactive actions such as targeted offers, improved support, or contract adjustments.
 
-1. Can we predict which customers are likely to churn?
-2. Which factors are most strongly associated with churn?
+This project focuses on:
+
+1. Predicting which customers are likely to churn
+2. Understanding the main factors driving churn behavior
 
 ---
 
@@ -88,10 +91,15 @@ Models were evaluated using:
 - ROC curve comparison
 
 ### 5. Model Interpretation
-To understand the drivers of churn, the project includes:
 
-- XGBoost feature importance
-- SHAP explainability
+Understanding why a model makes a prediction is as important as the prediction itself.
+
+To analyze the drivers of churn, the project includes:
+
+- Feature importance from tree-based models
+- SHAP (SHapley Additive exPlanations) values for detailed interpretation
+
+These techniques help explain which variables increase or decrease the likelihood of churn for each customer.
 
 ---
 
@@ -103,7 +111,7 @@ To understand the drivers of churn, the project includes:
 | Logistic Regression | 0.79 | 0.83 |
 | Random Forest | 0.78 | 0.82 |
 
-XGBoost achieved the best overall performance among the tested models.
+XGBoost achieved the best overall performance, with the highest ROC-AUC and balanced metrics across classes.
 
 ---
 
@@ -113,7 +121,13 @@ XGBoost achieved the best overall performance among the tested models.
 - **Month-to-month contracts** are strongly associated with higher churn risk
 - **Higher monthly charges** are associated with increased churn probability
 - **Longer contracts** are linked to lower churn risk
-- **Fiber optic internet service** appears strongly associated with churn in this dataset
+- **Fiber optic internet service** is strongly associated with churn in this dataset
+
+From a business perspective, these results suggest that retention strategies should focus on:
+
+- Encouraging customers to move to longer-term contracts
+- Monitoring customers with high monthly charges
+- Paying special attention to early-stage customers with low tenure
 
 ---
 
