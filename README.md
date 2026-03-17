@@ -125,7 +125,7 @@ These methods help move beyond prediction alone and answer a more practical busi
 
 **Why is a customer likely to churn?**
 
-SHAP summary plot:
+SHAP summary plot showing feature impact on churn prediction:
 
 ![SHAP Summary](notebooks/shap_summary.png)
 
