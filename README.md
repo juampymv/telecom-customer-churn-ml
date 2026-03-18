@@ -27,6 +27,14 @@ This project focuses on:
 
 ---
 
+## Dataset Snapshot
+
+Customer churn distribution:
+
+![Churn Distribution](notebooks/churn_distribution.png)
+
+---
+
 ## Tech Stack
 
 - Python
