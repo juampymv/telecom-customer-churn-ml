@@ -60,6 +60,7 @@ telecom-customer-churn-ml/
 ├── notebooks/
 │   ├── churn_model.ipynb
 │   ├── churn_model.html
+│   └── churn_distribution.png
 │   └── shap_summary.png
 │
 ├── README.md
