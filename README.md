@@ -1,6 +1,6 @@
 # Telecom Customer Churn Prediction
 
-End-to-end machine learning project focused on predicting customer churn in a telecom company using classification models and model explainability techniques.
+End-to-end machine learning project focused on predicting customer churn in a telecom company, with a strong emphasis on handling class imbalance and optimizing business-relevant metrics.
 
 ---
 
@@ -8,9 +8,9 @@ End-to-end machine learning project focused on predicting customer churn in a te
 
 Customer churn is a critical problem for subscription-based businesses, as losing customers directly impacts revenue and growth.
 
-In this project, I build a machine learning model to identify customers at risk of churn using demographic, contract, and service usage data.
+In this project, I build classification models to identify customers at risk of churn using demographic, contract, and service usage data.
 
-Beyond prediction, the goal is to understand the key drivers of churn in order to support data-driven retention strategies.
+A key challenge in this dataset is class imbalance, where non-churners significantly outnumber churners. The project focuses not only on prediction, but also on improving the model’s ability to detect actual churners.
 
 ---
 
@@ -22,8 +22,9 @@ Being able to identify customers at high risk of churn allows companies to take 
 
 This project focuses on:
 
-1. Predicting which customers are likely to churn
-2. Understanding the main factors driving churn behavior
+1. Predicting which customers are likely to churn  
+2. Maximizing the detection of churners (recall)  
+3. Understanding the main factors driving churn behavior  
 
 ---
 
@@ -60,7 +61,7 @@ telecom-customer-churn-ml/
 ├── notebooks/
 │   ├── churn_model.ipynb
 │   ├── churn_model.html
-│   └── churn_distribution.png
+│   ├── churn_distribution.png
 │   └── shap_summary.png
 │
 ├── README.md
@@ -73,70 +74,90 @@ telecom-customer-churn-ml/
 
 ### 1. Exploratory Data Analysis
 - Inspect dataset structure and missing values
-- Understand churn distribution
+- Analyze churn distribution (imbalanced dataset)
 - Explore customer, contract, and billing variables
 
 ### 2. Data Preprocessing
-- Clean and encode categorical features
+- Encode categorical features
 - Prepare target variable
-- Split data into training and test sets
-- Scale features when required
+- Stratified train-test split
+- Feature scaling for Logistic Regression
 
-### 3. Model Training
+### 3. Handling Class Imbalance
+
+To improve detection of churners:
+
+- Logistic Regression and Random Forest use:
+  - `class_weight="balanced"`
+- XGBoost uses:
+  - `scale_pos_weight`
+
+This ensures the model gives more importance to the minority class (churn).
+
+### 4. Model Training
+
 Three classification models were trained and compared:
 
-- Logistic Regression
-- Random Forest
-- XGBoost
+- Logistic Regression  
+- Random Forest  
+- XGBoost  
 
-### 4. Model Evaluation
+### 5. Model Evaluation
+
 Models were evaluated using:
 
-- Accuracy
-- Precision
-- Recall
-- ROC-AUC
-- Classification report
-- ROC curve comparison
+- Accuracy  
+- ROC-AUC  
+- Precision (Churn=1)  
+- Recall (Churn=1)  
+- F1-score (Churn=1)  
 
-### 5. Model Interpretation
+Special focus was placed on **recall**, as missing churners is more costly than false positives.
 
-Understanding why a model makes a prediction is as important as the prediction itself.
+### 6. Threshold Optimization
 
-To analyze the drivers of churn, the project includes:
+Default classification threshold (0.5) was adjusted to improve recall.
 
-- Feature importance from tree-based models
-- SHAP (SHapley Additive exPlanations) values for detailed interpretation
+Lowering the threshold (e.g., 0.4) allows the model to identify more churners, at the cost of lower precision.
 
-These techniques help explain which variables increase or decrease the likelihood of churn for each customer.
+This demonstrates the trade-off between:
+
+- Detecting more churners (recall)
+- Reducing false positives (precision)
 
 ---
 
 ## Model Performance
 
-| Model | Accuracy | ROC-AUC |
-|------|------|------|
-| XGBoost | 0.80 | 0.83 |
-| Logistic Regression | 0.79 | 0.83 |
-| Random Forest | 0.78 | 0.82 |
+| Model | Accuracy | ROC-AUC | Recall (Churn=1) | F1 (Churn=1) |
+|------|--------|--------|------------------|-------------|
+| XGBoost | 0.73 | 0.83 | 0.79 | 0.61 |
+| Logistic Regression | 0.73 | 0.83 | 0.80 | 0.61 |
+| Random Forest | 0.79 | 0.82 | 0.50 | 0.56 |
 
-XGBoost achieved the best overall performance, with the highest ROC-AUC and balanced metrics across classes.
+Note: Accuracy is less informative due to class imbalance, so recall and F1-score are prioritized.
+
+### Key Takeaways
+
+- **XGBoost and Logistic Regression** achieve strong recall after handling class imbalance  
+- **Random Forest** remains more conservative, with lower recall  
+- The best model depends on business priorities (recall vs precision trade-off)
 
 ---
 
 ## Key Insights
 
-- Customers with **short tenure** are more likely to churn
-- **Month-to-month contracts** are strongly associated with higher churn risk
-- **Higher monthly charges** are associated with increased churn probability
-- **Longer contracts** are linked to lower churn risk
-- **Fiber optic internet service** is strongly associated with churn in this dataset
+- Customers with **short tenure** are more likely to churn  
+- **Month-to-month contracts** are strongly associated with higher churn risk  
+- **Higher monthly charges** increase churn probability  
+- **Long-term contracts** reduce churn risk  
+- Customers with **fiber optic internet service** are associated with higher churn in this dataset  
 
-From a business perspective, these results suggest that retention strategies should focus on:
+From a business perspective:
 
-- Encouraging customers to move to longer-term contracts
-- Monitoring customers with high monthly charges
-- Paying special attention to early-stage customers with low tenure
+- Focus on **early-stage customers**
+- Encourage **long-term contracts**
+- Monitor **high-value customers at risk**
 
 ---
 
@@ -144,11 +165,9 @@ From a business perspective, these results suggest that retention strategies sho
 
 Feature importance and SHAP analysis were used to better understand model behavior.
 
-These methods help move beyond prediction alone and answer a more practical business question:
+These techniques help answer:
 
 **Why is a customer likely to churn?**
-
-SHAP summary plot showing feature impact on churn prediction:
 
 ![SHAP Summary](notebooks/shap_summary.png)
 
@@ -182,20 +201,21 @@ notebooks/churn_model.ipynb
 
 ## What This Project Demonstrates
 
-- End-to-end machine learning workflow
-- Model comparison using multiple classifiers
-- Use of business-oriented evaluation metrics
-- Ability to interpret model predictions with feature importance and SHAP
-- Clear connection between predictive modeling and business retention strategy
+- End-to-end machine learning workflow  
+- Handling class imbalance in real-world datasets  
+- Model comparison using business-oriented metrics  
+- Threshold tuning for decision-making  
+- Model interpretability with SHAP  
+- Translating ML results into business insights  
 
 ---
 
 ## Next Steps
 
-- Improve recall through threshold optimization
-- Perform hyperparameter tuning
-- Build a retention-focused business recommendation layer
-- Deploy the model as an interactive application
+- Hyperparameter tuning  
+- Cross-validation  
+- Cost-sensitive evaluation  
+- Model deployment (API or dashboard)  
 
 ---
 
